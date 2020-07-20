@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mini_notebook/models/note.dart';
+import 'package:mini_notebook/utils/database_helper.dart';
+import 'package:mini_notebook/screens/note_screen.dart';
 
 class NotebookPage extends StatefulWidget {
   @override
@@ -7,15 +9,22 @@ class NotebookPage extends StatefulWidget {
 }
 
 class _NotebookPageState extends State<NotebookPage> {
-  List<Note> notes = [
-    Note('Note 1', 'Contents of Note 1'),
-    Note('Note 2', 'Contents of Note 2'),
-    Note('Note 3', 'Contents of Note 3'),
-    Note('Note 4', 'Contents of Note 4'),
-    Note('Note 5', 'Contents of Note 5'),
-    Note('Note 6', 'Contents of Note 6'),
-    Note('Note 7', 'Contents of Note 7'),
-  ];
+  List<Note> notes = new List();
+  DatabaseHelper db = new DatabaseHelper();
+
+  @override
+  void initState() {
+    super.initState();
+
+    db.getAllNotes().then((tasks) {
+      setState(() {
+        tasks.forEach((element) {
+          notes.add(Note.fromMap(element));
+        });
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +38,7 @@ class _NotebookPageState extends State<NotebookPage> {
               color: Colors.lightBlue,
               child: ListTile(
                 title: Text(notes[index].title),
-                subtitle: Text(notes[index].contents),
+                subtitle: Text(notes[index].content),
                 onTap: () {
                   debugPrint('$index tapped');
                 },
@@ -39,8 +48,27 @@ class _NotebookPageState extends State<NotebookPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _createNewNote(context);
+        },
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void _createNewNote(BuildContext context) async {
+    String result = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => NoteScreen(Note('', ''))));
+
+    if (result == 'save') {
+      db.getAllNotes().then((tasks) {
+        setState(() {
+          notes.clear();
+          tasks.forEach((element) {
+            notes.add(Note.fromMap(element));
+          });
+        });
+      });
+    }
   }
 }

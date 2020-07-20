@@ -26,50 +26,60 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.note.title),
-        backgroundColor: Color.fromRGBO(120, 255, 190, 100),
-      ),
-      body: Container(
-        margin: EdgeInsets.all(15.0),
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+      resizeToAvoidBottomInset: false,
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+          debugPrint('Outside pressed');
+        },
+        child: SafeArea(
+          child: Container(
+            margin: EdgeInsets.all(15.0),
+            alignment: Alignment.center,
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: _titleController,
+                  decoration: InputDecoration(labelText: 'Title'),
+                ),
+                Padding(padding: EdgeInsets.all(5.0)),
+                TextField(
+                  controller: _contentController,
+                  decoration: InputDecoration(border: InputBorder.none),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                ),
+                Padding(padding: EdgeInsets.all(5.0)),
+                RaisedButton(
+                  child:
+                      (widget.note.id != null ? Text('Update') : Text('Add')),
+                  onPressed: () {
+                    if (widget.note.id != null) {
+                      db
+                          .updateNote(Note.fromMap(
+                            {
+                              'id': widget.note.id,
+                              'title': _titleController.text,
+                              'content': _contentController.text
+                            },
+                          ))
+                          .then(
+                            (value) => Navigator.pop(context, 'update'),
+                          );
+                    } else {
+                      db
+                          .insert(
+                            Note(
+                                _titleController.text, _contentController.text),
+                          )
+                          .then((value) => Navigator.pop(context, 'save'));
+                    }
+                  },
+                ),
+              ],
             ),
-            Padding(padding: EdgeInsets.all(5.0)),
-            TextField(
-              controller: _contentController,
-              decoration: InputDecoration(labelText: 'Content'),
-            ),
-            Padding(padding: EdgeInsets.all(5.0)),
-            RaisedButton(
-              child: (widget.note.id != null ? Text('Update') : Text('Add')),
-              onPressed: () {
-                if (widget.note.id != null) {
-                  db
-                      .updateNote(Note.fromMap(
-                        {
-                          'id': widget.note.id,
-                          'title': _titleController.text,
-                          'content': _contentController.text
-                        },
-                      ))
-                      .then(
-                        (value) => Navigator.pop(context, 'update'),
-                      );
-                } else {
-                  db
-                      .insert(
-                        Note(_titleController.text, _contentController.text),
-                      )
-                      .then((value) => Navigator.pop(context, 'save'));
-                }
-              },
-            ),
-          ],
+          ),
         ),
       ),
     );

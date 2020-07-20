@@ -28,6 +28,19 @@ class _NotebookPageState extends State<NotebookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text('Notebook', style: TextStyle(color: Colors.lightBlue[200])),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        actions: <Widget>[
+          IconButton(
+            color: Colors.lightBlue[200],
+            icon: Icon(Icons.add),
+            onPressed: () => _createNewNote(context),
+          )
+        ],
+      ),
       body: SafeArea(
         child: GridView.builder(
           itemCount: notes.length,
@@ -37,21 +50,17 @@ class _NotebookPageState extends State<NotebookPage> {
             return Card(
               color: Colors.lightBlue,
               child: ListTile(
+                contentPadding: EdgeInsets.all(8.0),
                 title: Text(notes[index].title),
                 subtitle: Text(notes[index].content),
                 onTap: () {
+                  _navigateToNote(context, notes[index]);
                   debugPrint('$index tapped');
                 },
               ),
             );
           },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _createNewNote(context);
-        },
-        child: Icon(Icons.add),
       ),
     );
   }
@@ -61,6 +70,22 @@ class _NotebookPageState extends State<NotebookPage> {
         MaterialPageRoute(builder: (context) => NoteScreen(Note('', ''))));
 
     if (result == 'save') {
+      db.getAllNotes().then((tasks) {
+        setState(() {
+          notes.clear();
+          tasks.forEach((element) {
+            notes.add(Note.fromMap(element));
+          });
+        });
+      });
+    }
+  }
+
+  void _navigateToNote(BuildContext context, Note note) async {
+    String result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NoteScreen(note)));
+
+    if (result == 'update') {
       db.getAllNotes().then((tasks) {
         setState(() {
           notes.clear();

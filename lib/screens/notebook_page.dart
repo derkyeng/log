@@ -49,14 +49,29 @@ class _NotebookPageState extends State<NotebookPage> {
           itemBuilder: (context, index) {
             return Card(
               color: Colors.lightBlue,
-              child: ListTile(
-                contentPadding: EdgeInsets.all(8.0),
-                title: Text(notes[index].title),
-                subtitle: Text(notes[index].content),
-                onTap: () {
-                  _navigateToNote(context, notes[index]);
-                  debugPrint('$index tapped');
-                },
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(8.0),
+                      title: Text(notes[index].title),
+                      subtitle: Text(notes[index].content),
+                      onTap: () {
+                        _navigateToNote(context, notes[index]);
+                        debugPrint('$index tapped');
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () =>
+                          _deleteNote(context, notes[index], index),
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
               ),
             );
           },
@@ -95,5 +110,13 @@ class _NotebookPageState extends State<NotebookPage> {
         });
       });
     }
+  }
+
+  void _deleteNote(BuildContext context, Note note, int position) async {
+    db.delete(note.id).then((note) {
+      setState(() {
+        notes.removeAt(position);
+      });
+    });
   }
 }

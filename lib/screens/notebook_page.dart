@@ -9,6 +9,12 @@ class NotebookPage extends StatefulWidget {
 }
 
 class _NotebookPageState extends State<NotebookPage> {
+  List<Color> noteColors = [
+    Colors.lightBlue[200],
+    Colors.lightBlue[300],
+    Colors.green[300],
+    Colors.blue[100]
+  ];
   List<Note> notes = new List();
   DatabaseHelper db = new DatabaseHelper();
 
@@ -30,7 +36,12 @@ class _NotebookPageState extends State<NotebookPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Notebook', style: TextStyle(color: Colors.lightBlue[200])),
+        title: Text(
+          'Notebook',
+          style: TextStyle(
+            color: Colors.lightBlue[200],
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         actions: <Widget>[
@@ -48,14 +59,17 @@ class _NotebookPageState extends State<NotebookPage> {
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
           itemBuilder: (context, index) {
             return Card(
-              color: Colors.lightBlue,
+              color: Colors.lightBlue[300],
               child: Column(
                 children: <Widget>[
                   Expanded(
                     child: ListTile(
-                      contentPadding: EdgeInsets.all(8.0),
+                      contentPadding: EdgeInsets.fromLTRB(10.0, 2.0, 5.0, 0),
                       title: Text(notes[index].title),
-                      subtitle: Text(notes[index].content),
+                      subtitle: Text(
+                        notes[index].content,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       onTap: () {
                         _navigateToNote(context, notes[index]);
                         debugPrint('$index tapped');
@@ -65,6 +79,7 @@ class _NotebookPageState extends State<NotebookPage> {
                   Align(
                     alignment: Alignment.bottomRight,
                     child: IconButton(
+                      focusColor: Colors.black,
                       icon: Icon(Icons.delete),
                       onPressed: () =>
                           _deleteNote(context, notes[index], index),

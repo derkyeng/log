@@ -60,24 +60,24 @@ class _NotebookPageState extends State<NotebookPage> {
           itemBuilder: (context, index) {
             return Card(
               color: Colors.lightBlue[300],
-              child: Column(
+              child: Stack(
+                fit: StackFit.expand,
                 children: <Widget>[
-                  Expanded(
-                    child: ListTile(
-                      contentPadding: EdgeInsets.fromLTRB(10.0, 2.0, 5.0, 0),
-                      title: Text(notes[index].title),
-                      subtitle: Text(
-                        notes[index].content,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      onTap: () {
-                        _navigateToNote(context, notes[index]);
-                        debugPrint('$index tapped');
-                      },
+                  ListTile(
+                    contentPadding: EdgeInsets.fromLTRB(10.0, 2.0, 5.0, 0),
+                    title: Text(notes[index].title),
+                    subtitle: Text(
+                      notes[index].content,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    onTap: () {
+                      _navigateToNote(context, notes[index]);
+                      debugPrint('$index tapped');
+                    },
                   ),
-                  Align(
-                    alignment: Alignment.bottomRight,
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
                     child: IconButton(
                       focusColor: Colors.black,
                       icon: Icon(Icons.delete),

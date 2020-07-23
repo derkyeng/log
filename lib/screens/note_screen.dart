@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_notebook/models/note.dart';
 import 'package:mini_notebook/utils/database_helper.dart';
@@ -70,7 +71,7 @@ class _NoteScreenState extends State<NoteScreen> {
           )
         ],
       ),
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
@@ -83,20 +84,13 @@ class _NoteScreenState extends State<NoteScreen> {
               Container(
                 margin: EdgeInsets.all(15.0),
                 alignment: Alignment.center,
-                child: Column(
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.all(5.0)),
-                    TextField(
-                      controller: _contentController,
-                      decoration: InputDecoration(border: InputBorder.none),
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      style: TextStyle(
-                        fontSize: 18.5,
-                      ),
-                    ),
-                    Padding(padding: EdgeInsets.all(5.0)),
-                  ],
+                child: CupertinoTextField(
+                  controller: _contentController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  style: TextStyle(
+                    fontSize: 18.5,
+                  ),
                 ),
               ),
             ],

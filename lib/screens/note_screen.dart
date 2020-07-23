@@ -40,6 +40,35 @@ class _NoteScreenState extends State<NoteScreen> {
           ),
           style: TextStyle(color: Colors.lightBlue[300], fontSize: 22.5),
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.check,
+              color: Colors.lightBlue[300],
+            ),
+            onPressed: () {
+              if (widget.note.id != null) {
+                db
+                    .updateNote(Note.fromMap(
+                      {
+                        'id': widget.note.id,
+                        'title': _titleController.text,
+                        'content': _contentController.text
+                      },
+                    ))
+                    .then(
+                      (value) => Navigator.pop(context, 'update'),
+                    );
+              } else {
+                db
+                    .insert(
+                      Note(_titleController.text, _contentController.text),
+                    )
+                    .then((value) => Navigator.pop(context, 'save'));
+              }
+            },
+          )
+        ],
       ),
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
@@ -49,51 +78,28 @@ class _NoteScreenState extends State<NoteScreen> {
           debugPrint('Outside pressed');
         },
         child: SafeArea(
-          child: Container(
-            margin: EdgeInsets.all(15.0),
-            alignment: Alignment.center,
-            child: Column(
-              children: <Widget>[
-                // TextField(
-                //   controller: _titleController,
-                //   decoration: InputDecoration(labelText: 'Title'),
-                // ),
-                // Padding(padding: EdgeInsets.all(5.0)),
-                TextField(
-                  controller: _contentController,
-                  decoration: InputDecoration(border: InputBorder.none),
-                  keyboardType: TextInputType.multiline,
-                  maxLines: null,
+          child: ListView(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(15.0),
+                alignment: Alignment.center,
+                child: Column(
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.all(5.0)),
+                    TextField(
+                      controller: _contentController,
+                      decoration: InputDecoration(border: InputBorder.none),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: TextStyle(
+                        fontSize: 18.5,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.all(5.0)),
+                  ],
                 ),
-                Padding(padding: EdgeInsets.all(5.0)),
-                RaisedButton(
-                  child:
-                      (widget.note.id != null ? Text('Update') : Text('Add')),
-                  onPressed: () {
-                    if (widget.note.id != null) {
-                      db
-                          .updateNote(Note.fromMap(
-                            {
-                              'id': widget.note.id,
-                              'title': _titleController.text,
-                              'content': _contentController.text
-                            },
-                          ))
-                          .then(
-                            (value) => Navigator.pop(context, 'update'),
-                          );
-                    } else {
-                      db
-                          .insert(
-                            Note(
-                                _titleController.text, _contentController.text),
-                          )
-                          .then((value) => Navigator.pop(context, 'save'));
-                    }
-                  },
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

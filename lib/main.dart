@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mini_notebook/screens/notebook_page.dart';
+import 'package:mini_notebook/screens/notebook.dart';
 
 void main() {
   runApp(NotebookApp());

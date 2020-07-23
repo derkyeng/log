@@ -26,6 +26,21 @@ class _NoteScreenState extends State<NoteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: BackButton(
+          color: Colors.lightBlue[300],
+        ),
+        elevation: 0.0,
+        title: TextField(
+          controller: _titleController,
+          decoration: InputDecoration.collapsed(
+            hintText: 'Title',
+            border: InputBorder.none,
+          ),
+          style: TextStyle(color: Colors.lightBlue[300], fontSize: 22.5),
+        ),
+      ),
       resizeToAvoidBottomInset: false,
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -39,11 +54,11 @@ class _NoteScreenState extends State<NoteScreen> {
             alignment: Alignment.center,
             child: Column(
               children: <Widget>[
-                TextField(
-                  controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
-                ),
-                Padding(padding: EdgeInsets.all(5.0)),
+                // TextField(
+                //   controller: _titleController,
+                //   decoration: InputDecoration(labelText: 'Title'),
+                // ),
+                // Padding(padding: EdgeInsets.all(5.0)),
                 TextField(
                   controller: _contentController,
                   decoration: InputDecoration(border: InputBorder.none),

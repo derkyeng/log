@@ -9,12 +9,6 @@ class NotebookPage extends StatefulWidget {
 }
 
 class _NotebookPageState extends State<NotebookPage> {
-  List<Color> noteColors = [
-    Colors.lightBlue[200],
-    Colors.lightBlue[300],
-    Colors.green[300],
-    Colors.blue[100]
-  ];
   List<Note> notes = new List();
   DatabaseHelper db = new DatabaseHelper();
 
@@ -65,10 +59,20 @@ class _NotebookPageState extends State<NotebookPage> {
                 children: <Widget>[
                   ListTile(
                     contentPadding: EdgeInsets.fromLTRB(10.0, 2.0, 5.0, 0),
-                    title: Text(notes[index].title),
+                    title: Text(
+                      notes[index].title,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                      ),
+                    ),
                     subtitle: Text(
                       notes[index].content,
                       overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 18.5,
+                      ),
                     ),
                     onTap: () {
                       _navigateToNote(context, notes[index]);

@@ -1,7 +1,7 @@
 # MiniBook
 Minimal Notebook App made with Flutter and HiveDB
 
-![alt-text-1](<lib/imgs/Recipe 1.png> =250x250) ![alt-text-2](<lib/imgs/Recipe 2.png> | width=50)
+![alt-text-1](<lib/imgs/Recipe 1.png>) ![alt-text-2](<lib/imgs/Recipe 2.png>)
 
 ## Getting Started
 

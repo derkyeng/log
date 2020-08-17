@@ -27,6 +27,7 @@ class _NotebookPageState extends State<NotebookPage> {
 
   @override
   Widget build(BuildContext context) {
+    db.getAllNotes().then((value) => print(value));
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

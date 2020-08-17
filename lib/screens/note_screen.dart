@@ -93,6 +93,9 @@ class _NoteScreenState extends State<NoteScreen> {
                   ),
                 ),
               ),
+              RaisedButton(
+                onPressed: () => print(_contentController.hashCode),
+              ),
             ],
           ),
         ),
